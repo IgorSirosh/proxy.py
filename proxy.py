@@ -1,5 +1,6 @@
 from flask import Flask, request, Response
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -11,7 +12,7 @@ def proxy():
 
     try:
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "User-Agent": "Mozilla/5.0",
             "Accept": "application/json"
         }
         r = requests.get(target, headers=headers, timeout=10)
@@ -20,4 +21,5 @@ def proxy():
         return Response(str(e), status=500)
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get("PORT", 8080))  # ⬅️ Render укажет свой порт здесь
+    app.run(host="0.0.0.0", port=port)        # ⬅️ Делаем его доступным извне
